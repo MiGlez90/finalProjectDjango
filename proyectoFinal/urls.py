@@ -18,13 +18,18 @@ from django.urls import path, include
 from rest_framework import routers
 from Profile.views import ProfileViewSet, CollegeViewSet
 
+from accounts import urls as authUrls
+
 router = routers.DefaultRouter()
 router.register(r'profileapi', ProfileViewSet)
 router.register(r'collegeapi', CollegeViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
+    path('api/auth/', include(authUrls, namespace='auth-urls')),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls'))
 ]
 
 
