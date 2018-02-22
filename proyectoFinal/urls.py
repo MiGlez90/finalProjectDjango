@@ -14,22 +14,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
 from rest_framework import routers
-from Profile.views import ProfileViewSet, CollegeViewSet
+from Profile.views import ProfileViewSet, CollegeViewSet, ProfileWithToken
+from django.conf import settings
+from django.views.static import serve
 
 from accounts import urls as authUrls
 
 router = routers.DefaultRouter()
 router.register(r'profileapi', ProfileViewSet)
 router.register(r'collegeapi', CollegeViewSet)
+router.register(r'userprofile', ProfileWithToken)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/auth/', include(authUrls, namespace='auth-urls')),
     path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls'))
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    re_path(
+        r'^media/(?P<path>.*)$',
+        serve,
+        {'document_root': settings.MEDIA_ROOT}
+    ),
 ]
 
 

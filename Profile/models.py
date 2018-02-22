@@ -172,6 +172,7 @@ class Profile(models.Model):
     credits_coursed = models.IntegerField(blank=True, null=True)
     credit_percentage_coursed = models.IntegerField(blank=True, null=True)
     nationality = models.CharField(max_length=30, blank=True, null=True)
+    profilePicture = models.ImageField(upload_to='profilePictures', blank=True, null=True)
 
     def __str__(self):
         return self.academicId

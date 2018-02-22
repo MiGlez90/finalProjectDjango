@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import ProfileSerializer, CollegeSerializer
+from .serializers import ProfileSerializer, CollegeSerializer, UserWithProfileSerializer
 from  .models import Profile, College
+from django.contrib.auth.models import User
 # Create your views here.
 
 
@@ -13,3 +14,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class CollegeViewSet(viewsets.ModelViewSet):
     queryset = College.objects.all()
     serializer_class = CollegeSerializer
+
+
+class ProfileWithToken(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserWithProfileSerializer
