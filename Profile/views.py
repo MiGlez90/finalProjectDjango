@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import ProfileSerializer, CollegeSerializer, UserWithProfileSerializer
+from .serializers import BasicProfileSerializer, ProfileSerializer, CollegeSerializer, UserWithProfileSerializer
 from  .models import Profile, College
 from django.contrib.auth.models import User
 # Create your views here.
@@ -9,6 +9,13 @@ from django.contrib.auth.models import User
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ProfileSerializer
+        if self.action == 'retrieve':
+            return ProfileSerializer
+        return BasicProfileSerializer
 
 
 class CollegeViewSet(viewsets.ModelViewSet):
