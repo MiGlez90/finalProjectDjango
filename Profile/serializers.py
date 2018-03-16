@@ -12,6 +12,7 @@ class BasicProfileSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False,read_only=True)
+    # profilePicture = serializers.Field('image.url')
     class Meta:
         model = Profile
         fields = '__all__'

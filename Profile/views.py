@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .serializers import BasicProfileSerializer, ProfileSerializer, CollegeSerializer, UserWithProfileSerializer
-from  .models import Profile, College
+from .models import Profile, College
 from django.contrib.auth.models import User
+from rest_framework import views
+from rest_framework.response import Response
+
+
 # Create your views here.
 
 
@@ -26,3 +30,9 @@ class CollegeViewSet(viewsets.ModelViewSet):
 class ProfileWithToken(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserWithProfileSerializer
+
+
+class UserView(views.APIView):
+    def get(self, request):
+        user = request.user
+        return Response(UserWithProfileSerializer(user).data)

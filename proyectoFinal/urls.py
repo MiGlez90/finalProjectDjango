@@ -16,20 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path, include
 from rest_framework import routers
-from Profile.views import ProfileViewSet, CollegeViewSet, ProfileWithToken
+from Profile.views import ProfileViewSet, CollegeViewSet, ProfileWithToken, UserView
 from django.conf import settings
 from django.views.static import serve
 
 from accounts import urls as authUrls
 
 router = routers.DefaultRouter()
-router.register(r'profileapi', ProfileViewSet)
-router.register(r'collegeapi', CollegeViewSet)
-router.register(r'userprofile', ProfileWithToken)
+router.register(r'profiles', ProfileViewSet)
+router.register(r'colleges', CollegeViewSet)
+router.register(r'users', ProfileWithToken)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('me/', UserView.as_view()),
     path('api/auth/', include(authUrls, namespace='auth-urls')),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
