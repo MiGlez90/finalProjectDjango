@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import BasicProfileSerializer, ProfileSerializer, CollegeSerializer, UserWithProfileSerializer, TutorSerializer, BasicTutorSerializer, AddressSerializer, BasicAddressSerializer
-from .models import Profile, College, Tutor, Address
+from .serializers import BasicCertificationSerializer, CertificationSerializer, BasicProfileSerializer, ProfileSerializer, CollegeSerializer, UserWithProfileSerializer, TutorSerializer, BasicTutorSerializer, AddressSerializer, BasicAddressSerializer
+from .models import Profile, College, Tutor, Address, CertificationType
 from django.contrib.auth.models import User
 from rest_framework import views
 from rest_framework.response import Response
@@ -36,7 +36,18 @@ class UserView(views.APIView):
     def get(self, request):
         user = request.user
         return Response(UserWithProfileSerializer(user,context={"request": request}).data)
+"""
+class UserView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserWithProfileSerializer
 
+    def get_queryset(self):
+        # Recupera el usuario que hace la petición
+        user = self.request.user
+        # Crea el queryset
+        # Filtra y recupera solo los proyectos que pertenecen al usuario
+        return User.objects.filter(user=user)
+"""
 
 class TutorViewSet(viewsets.ModelViewSet):
     queryset = Tutor.objects.all()
@@ -54,7 +65,7 @@ class TutorViewSet(viewsets.ModelViewSet):
         user = self.request.user
         # Crea el queryset
         # Filtra y recupera solo los proyectos que pertenecen al usuario
-        return Tutor.objects.filter(user=user)
+        return Tutor.objects.filter(profile=user.profile)
 
 
 class AddressViewSet(viewsets.ModelViewSet):
@@ -67,3 +78,15 @@ class AddressViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return AddressSerializer
         return BasicAddressSerializer
+
+
+class CertificationViewSet(viewsets.ModelViewSet):
+    queryset = CertificationType.objects.all()
+    serializer_class = CertificationSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CertificationSerializer
+        if self.action == 'retrieve':
+            return CertificationSerializer
+        return BasicCertificationSerializer

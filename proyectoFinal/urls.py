@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path, include
 from rest_framework import routers
-from Profile.views import ProfileViewSet, CollegeViewSet, ProfileWithToken, UserView, TutorViewSet, AddressViewSet
+from Profile.views import ProfileViewSet, CollegeViewSet, ProfileWithToken, UserView, TutorViewSet, AddressViewSet, CertificationViewSet
 from django.conf import settings
 from django.views.static import serve
 
@@ -24,9 +24,10 @@ from accounts import urls as authUrls
 
 router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)
+router.register(r'certifications', CertificationViewSet)
 router.register(r'colleges', CollegeViewSet)
 router.register(r'users', ProfileWithToken)
-router.register(r'tutors', TutorViewSet)
+router.register(r'tutor', TutorViewSet)
 router.register(r'addresses', AddressViewSet)
 
 urlpatterns = [

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, College, Tutor, Address
+from .models import Profile, College, Tutor, Address, CertificationType
 from accounts.serializers import UserSerializer
 from django.contrib.auth.models import User
 
@@ -60,34 +60,12 @@ class BasicProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = '__all__'
 
-
-class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False,read_only=True)
-    profilePicture = Base64ImageField(max_length=None, use_url=True)
-    wallPicture = Base64ImageField(max_length=None, use_url=True)
-    class Meta:
-        model = Profile
-        fields = '__all__'
-
-
-
 class CollegeSerializer(serializers.ModelSerializer):
     profilePicture = Base64ImageField(max_length=None, use_url=True)
     wallPicture = Base64ImageField(max_length=None, use_url=True)
     class Meta:
         model = College
         fields = '__all__'
-
-
-class UserWithProfileSerializer(serializers.ModelSerializer):
-    profile = BasicProfileSerializer(many=False,read_only=True)
-    profile.profilePicture = Base64ImageField(max_length=None, use_url=True)
-    profile.wallPicture = Base64ImageField(max_length=None,use_url=True)
-
-    class Meta:
-        model = User
-        fields = ['username', 'profile', 'id', 'email', 'is_staff', 'first_name', 'last_name']
-
 
 class BasicAddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -115,3 +93,32 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = '__all__'
+
+class BasicCertificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CertificationType
+        fields = '__all__'
+
+class CertificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CertificationType
+        fields = '__all__'
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False,read_only=True)
+    addresses = BasicAddressSerializer(many=True, read_only=True)
+    profilePicture = Base64ImageField(max_length=None, use_url=True)
+    wallPicture = Base64ImageField(max_length=None, use_url=True)
+    certifications = CertificationSerializer(many=True, read_only=True)
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+
+class UserWithProfileSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(many=False,read_only=True)
+    profile.profilePicture = Base64ImageField(max_length=None, use_url=True)
+    profile.wallPicture = Base64ImageField(max_length=None,use_url=True)
+    class Meta:
+        model = User
+        fields = ['username', 'profile', 'id', 'email', 'is_staff', 'first_name', 'last_name']

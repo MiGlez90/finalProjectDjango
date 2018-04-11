@@ -1,4 +1,8 @@
 from django.db import models
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import sys
 
 # Create your models here.
 from django.contrib.auth.models import User
@@ -146,6 +150,25 @@ class Profile(models.Model):
     def __str__(self):
         return 'Perfil de ' + self.user.username
 
+    def save(self):
+        # Opening the uploaded image
+        im = Image.open(self.profilePicture)
+
+        output = BytesIO()
+
+        # Resize/modify the image
+        im = im.resize((200, 200))
+
+        # after modifications, save it to the output
+        im.save(output, format='JPEG', quality=1200)
+        output.seek(0)
+
+        # change the imagefield value to be the newley modifed image value
+        self.profilePicture = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.profilePicture.name.split('.')[0], 'image/jpeg',
+                                        sys.getsizeof(output), None)
+
+        super(Profile, self).save()
+
 
 class Option(models.Model):
     FIRST = '1'
@@ -176,6 +199,7 @@ class Subject(models.Model):
 class Address(models.Model):
     profile = models.ForeignKey(Profile, related_name="addresses", on_delete=models.CASCADE, blank=True, null=True)
     address1 = models.CharField(max_length=100)
+    suburb = models.CharField(max_length=100, default="")
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
@@ -186,7 +210,7 @@ class Address(models.Model):
 
 
 class Tutor(models.Model):
-    address = models.OneToOneField(Address, on_delete=models.CASCADE)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True, blank=True)
     GRANDFATHER = 'GF'
     GRANDMOTHER = 'GM'
     UNCLE = 'U'
@@ -204,6 +228,8 @@ class Tutor(models.Model):
     relationship = models.CharField(max_length=2, choices=RELATIONSHIP, default=FATHER)
     full_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=60)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    cellphone_number = models.CharField(max_length=15, blank=True, null=True)
 
     def __str__(self):
         return self.full_name
