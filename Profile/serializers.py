@@ -107,6 +107,7 @@ class CertificationSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False,read_only=True)
     addresses = BasicAddressSerializer(many=True, read_only=True)
+    certifications = CertificationSerializer(many=True, read_only=True)
     profilePicture = Base64ImageField(max_length=None, use_url=True)
     wallPicture = Base64ImageField(max_length=None, use_url=True)
     certifications = CertificationSerializer(many=True, read_only=True)

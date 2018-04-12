@@ -97,23 +97,13 @@ class AcademicProgram(models.Model):
     def __str__(self):
         return self.name
 
-
+"""
 class Language(models.Model):
     name = models.CharField(max_length=60)
 
     def __str__(self):
         return self.name
-
-
-class CertificationType(models.Model):
-    language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name='certification_types', blank=True,
-                                 null=True)
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100, null=True)
-
-    def __str__(self):
-        return self.name
-
+"""
 
 class Profile(models.Model):
     MALE = 'M'
@@ -128,7 +118,7 @@ class Profile(models.Model):
     tutor = models.OneToOneField('Tutor', on_delete=models.CASCADE, blank=True, null=True)
     academic_program = models.ForeignKey(AcademicProgram, related_name="profile", on_delete=models.CASCADE, blank=True,
                                          null=True)
-    certifications = models.ManyToManyField(CertificationType, related_name="profile", blank=True)
+    #certifications = models.ManyToManyField(CertificationType, related_name="profile", blank=True)
     gender = models.CharField(max_length=2, choices=GENDER, default=MALE)
     academicId = models.CharField(max_length=8, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
@@ -169,6 +159,25 @@ class Profile(models.Model):
 
         super(Profile, self).save()
 
+class CertificationType(models.Model):
+    """
+    language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name='certification_types', blank=True,
+                                 null=True)
+    """
+    CERTIFICADO = 'CE'
+    CONSTANCIA = 'CO'
+    TYPES = (
+        (CERTIFICADO, 'Certificado'),
+        (CONSTANCIA, 'Constancia'),
+    )
+    profile = models.ForeignKey(Profile, related_name="certifications", on_delete=models.CASCADE, blank=True, null=True)
+    type = models.CharField(choices=TYPES, default=CERTIFICADO, max_length=2)
+    language = models.CharField(max_length=100, default="")
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=100, null=True)
+
+    def __str__(self):
+        return self.name
 
 class Option(models.Model):
     FIRST = '1'
