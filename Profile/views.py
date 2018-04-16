@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import BasicCertificationSerializer, CertificationSerializer, BasicProfileSerializer, ProfileSerializer, CollegeSerializer, UserWithProfileSerializer, TutorSerializer, BasicTutorSerializer, AddressSerializer, BasicAddressSerializer
-from .models import Profile, College, Tutor, Address, CertificationType
+from .serializers import BasicCertificationSerializer, CertificationSerializer, BasicProfileSerializer, ProfileSerializer, CollegeSerializer, BasicCollegeSerializer, DepartmentSerializer, BasicDepartmentSerializer, AcademicProgramSerializer, BasicAcademicProgramSerializer, UserWithProfileSerializer, TutorSerializer, BasicTutorSerializer, AddressSerializer, BasicAddressSerializer
+from .models import Profile, College, Department, AcademicProgram, Tutor, Address, CertificationType
 from django.contrib.auth.models import User
 from rest_framework import views
 from rest_framework.response import Response
@@ -25,6 +25,37 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class CollegeViewSet(viewsets.ModelViewSet):
     queryset = College.objects.all()
     serializer_class = CollegeSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CollegeSerializer
+        if self.action == 'retrieve':
+            return CollegeSerializer
+        return BasicCollegeSerializer
+
+
+class DepartmentViewSet(viewsets.ModelViewSet):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return DepartmentSerializer
+        if self.action == 'retrieve':
+            return DepartmentSerializer
+        return BasicDepartmentSerializer
+
+
+class AcademicProgramViewset(viewsets.ModelViewSet):
+    queryset = AcademicProgram.objects.all()
+    serializer_class = AcademicProgramSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return AcademicProgramSerializer
+        if self.action == 'retrieve':
+            return AcademicProgramSerializer
+        return BasicAcademicProgramSerializer
 
 
 class ProfileWithToken(viewsets.ModelViewSet):
