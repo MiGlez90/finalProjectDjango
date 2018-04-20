@@ -82,6 +82,7 @@ class College(models.Model):
 class Department(models.Model):
     college = models.ForeignKey(College, related_name='departments', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100)
+    abbreviation = models.CharField(max_length=10, default="")
 
     def __str__(self):
         return self.name
