@@ -157,7 +157,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     certifications = CertificationSerializer(many=True, read_only=True)
     profilePicture = Base64ImageField(max_length=None, use_url=True)
     wallPicture = Base64ImageField(max_length=None, use_url=True)
-
+    academic_program = AcademicProgramSerializer(many=False, read_only=True)
     class Meta:
         model = Profile
         fields = '__all__'
