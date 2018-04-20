@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import BasicCertificationSerializer, CertificationSerializer, BasicProfileSerializer, ProfileSerializer, CollegeSerializer, BasicCollegeSerializer, DepartmentSerializer, BasicDepartmentSerializer, AcademicProgramSerializer, BasicAcademicProgramSerializer, UserWithProfileSerializer, TutorSerializer, BasicTutorSerializer, AddressSerializer, BasicAddressSerializer
-from .models import Profile, College, Department, AcademicProgram, Tutor, Address, CertificationType
+from .serializers import BasicCertificationSerializer, CertificationSerializer, BasicProfileSerializer, ProfileSerializer, CollegeSerializer, BasicCollegeSerializer, DepartmentSerializer, BasicDepartmentSerializer, AcademicProgramSerializer, BasicAcademicProgramSerializer, UserWithProfileSerializer, TutorSerializer, BasicTutorSerializer, AddressSerializer, BasicAddressSerializer, DocumentSerializer
+from .models import Profile, College, Department, AcademicProgram, Tutor, Address, CertificationType, Document
 from django.contrib.auth.models import User
 from rest_framework import views
 from rest_framework.response import Response
@@ -15,6 +15,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
     def get_serializer_class(self):
+        print("Esta es la accion ", self.action)
         if self.action == 'list':
             return ProfileSerializer
         if self.action == 'retrieve':
@@ -120,4 +121,18 @@ class CertificationViewSet(viewsets.ModelViewSet):
             return CertificationSerializer
         if self.action == 'retrieve':
             return CertificationSerializer
+        """if self.action == 'partial_update':
+            return CertificationSerializer"""
         return BasicCertificationSerializer
+
+
+class DocumentsViewSet(viewsets.ModelViewSet):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+
+    def get_queryset(self):
+        # Recupera el usuario que hace la petición
+        user = self.request.user
+        # Crea el queryset
+        # Filtra y recupera solo los proyectos que pertenecen al usuario
+        return Document.objects.filter(profile=user.profile)

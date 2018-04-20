@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path, include
 from rest_framework import routers
-from Profile.views import ProfileViewSet, CollegeViewSet, DepartmentViewSet, AcademicProgramViewset, ProfileWithToken, UserView, TutorViewSet, AddressViewSet, CertificationViewSet
+from Profile.views import ProfileViewSet, DocumentsViewSet, CollegeViewSet, DepartmentViewSet, AcademicProgramViewset, ProfileWithToken, UserView, TutorViewSet, AddressViewSet, CertificationViewSet
 from django.conf import settings
 from django.views.static import serve
 
@@ -25,6 +25,7 @@ from accounts import urls as authUrls
 router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)
 router.register(r'certifications', CertificationViewSet)
+router.register(r'documents', DocumentsViewSet)
 router.register(r'colleges', CollegeViewSet)
 router.register(r'departments', DepartmentViewSet)
 router.register(r'academic_programs', AcademicProgramViewset)

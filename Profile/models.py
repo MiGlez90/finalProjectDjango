@@ -133,6 +133,8 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     cellphone_number = models.CharField(max_length=15, blank=True, null=True)
     credits_coursed = models.FloatField(blank=True, null=True)
+    grade = models.FloatField(blank=True, null=True)
+    current_semester = models.IntegerField(blank=True, null=True)
     credit_percentage_coursed = models.FloatField(blank=True, null=True)
     nationality = models.CharField(max_length=30, blank=True, null=True)
     profilePicture = models.ImageField(upload_to='profilePictures', blank=True, null=True)
@@ -160,6 +162,16 @@ class Profile(models.Model):
 
         super(Profile, self).save()
 
+
+class Document(models.Model):
+    profile = models.ForeignKey(Profile, related_name="documents", on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    docfile = models.FileField(upload_to='documents/%Y/%m/%d',blank=True,null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class CertificationType(models.Model):
     """
     language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name='certification_types', blank=True,
@@ -179,8 +191,7 @@ class CertificationType(models.Model):
 
     def __str__(self):
         return self.name
-
-class Option(models.Model):
+"""class Option(models.Model):
     FIRST = '1'
     SECOND = '2'
     THIRD = '3'
@@ -204,7 +215,7 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
-
+"""
 
 class Address(models.Model):
     profile = models.ForeignKey(Profile, related_name="addresses", on_delete=models.CASCADE, blank=True, null=True)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, College, Department, AcademicProgram, Tutor, Address, CertificationType
+from .models import Profile, College, Department, AcademicProgram, Tutor, Address, CertificationType, Document
 from accounts.serializers import UserSerializer
 from django.contrib.auth.models import User
 
@@ -151,6 +151,14 @@ class CertificationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class DocumentSerializer(serializers.ModelSerializer):
+    docfile = serializers.FileField(max_length=None, allow_empty_file=False, use_url=True)
+
+    class Meta:
+        model = Document
+        fields = '__all__'
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False,read_only=True)
     addresses = BasicAddressSerializer(many=True, read_only=True)
@@ -158,6 +166,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     profilePicture = Base64ImageField(max_length=None, use_url=True)
     wallPicture = Base64ImageField(max_length=None, use_url=True)
     academic_program = AcademicProgramSerializer(many=False, read_only=True)
+    documents = DocumentSerializer(many=True, read_only=True)
+
     class Meta:
         model = Profile
         fields = '__all__'

@@ -31,13 +31,13 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'Profile',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Profile',
     'accounts',
     # Agregamos las librerias necesarias para hacer autenticación rest auth
     'rest_framework',
