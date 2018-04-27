@@ -5,6 +5,9 @@ from .models import Profile, College, Department, AcademicProgram, Tutor, Addres
 from django.contrib.auth.models import User
 from rest_framework import views
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.parsers import JSONParser,MultiPartParser, FormParser
+from rest_framework import status
 
 
 # Create your views here.
@@ -21,6 +24,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return ProfileSerializer
         return BasicProfileSerializer
+
 
 
 class CollegeViewSet(viewsets.ModelViewSet):
@@ -130,9 +134,28 @@ class DocumentsViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
 
+    # parser_classes = (JSONParser,MultiPartParser, FormParser,)
+
     def get_queryset(self):
         # Recupera el usuario que hace la petición
         user = self.request.user
         # Crea el queryset
         # Filtra y recupera solo los proyectos que pertenecen al usuario
         return Document.objects.filter(profile=user.profile)
+
+    """def perform_create(self, serializer):
+        serializer.save(profile=self.request.user.profile,
+                        docfile=self.request.data.get('datafile'))"""
+
+""""
+class DocumentsViewSet(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(request, *args, **kwargs):
+        file_serializer = DocumentSerializer(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.save()
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+"""

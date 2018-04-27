@@ -123,7 +123,9 @@ class Profile(models.Model):
     gender = models.CharField(max_length=2, choices=GENDER, default=MALE)
     academicId = models.CharField(max_length=8, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
-    curp = models.CharField(max_length=20, blank=True, null=True)
+    surname = models.CharField(max_length=100, blank=True, null=True)
+    given_name = models.CharField(max_length=100, blank=True, null=True, default="")
+    curp = models.CharField(max_length=20, blank=True, null=True, default="")
     about = models.TextField(max_length=500, blank=True, null=True)
     passport_number = models.CharField(max_length=20, blank=True, null=True)
     ssn_number = models.CharField(max_length=20, blank=True, null=True)
@@ -143,29 +145,31 @@ class Profile(models.Model):
     def __str__(self):
         return 'Perfil de ' + self.user.username
 
-    def save(self):
+    """def save(self):
         # Opening the uploaded image
-        im = Image.open(self.profilePicture)
+        if self.profilePicture is not None:
+            im = Image.open(self.profilePicture)
+    
+            output = BytesIO()
 
-        output = BytesIO()
+            # Resize/modify the image
+            im = im.resize((200, 200))
 
-        # Resize/modify the image
-        im = im.resize((200, 200))
+            # after modifications, save it to the output
+            im.save(output, format='JPEG', quality=1200)
+            output.seek(0)
 
-        # after modifications, save it to the output
-        im.save(output, format='JPEG', quality=1200)
-        output.seek(0)
+            # change the imagefield value to be the newley modifed image value
+            self.profilePicture = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.profilePicture.name.split('.')[0], 'image/jpeg',
+                                            sys.getsizeof(output), None)
 
-        # change the imagefield value to be the newley modifed image value
-        self.profilePicture = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.profilePicture.name.split('.')[0], 'image/jpeg',
-                                        sys.getsizeof(output), None)
-
-        super(Profile, self).save()
+        super(Profile, self).save()"""
 
 
 class Document(models.Model):
     profile = models.ForeignKey(Profile, related_name="documents", on_delete=models.CASCADE, blank=True, null=True)
-    name = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True, default="")
+    code = models.CharField(max_length=3, default="")
     docfile = models.FileField(upload_to='documents/%Y/%m/%d',blank=True,null=True)
 
     def __str__(self):
