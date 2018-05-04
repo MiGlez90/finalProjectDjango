@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, College, Department, AcademicProgram, Tutor, Address, CertificationType, Document
+from .models import *
 from accounts.serializers import UserSerializer
 from django.contrib.auth.models import User
 
@@ -63,14 +63,14 @@ class BasicProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DepartmentNameSerializer(serializers.ModelSerializer):
+class DepartmentSerializerForAcademic(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = ['name']
+        fields = '__all__'
 
 
 class AcademicProgramSerializer(serializers.ModelSerializer):
-    department = DepartmentNameSerializer(many=False, read_only=True)
+    department = DepartmentSerializerForAcademic(many=False, read_only=True)
 
     class Meta:
         model = AcademicProgram
@@ -89,8 +89,17 @@ class BasicDepartmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CollegeSerializerForDepartment(serializers.ModelSerializer):
+    class Meta:
+        model = College
+        fields = '__all__'
+
+
 class DepartmentSerializer(serializers.ModelSerializer):
-    academic_programs = AcademicProgramSerializer(many=True,read_only=True)
+    #college = serializers.SlugRelatedField(many=False, read_only=True,
+    #                                      slug_field='name')
+    college = CollegeSerializerForDepartment(many=False, read_only=True)
+    #academic_programs = AcademicProgramSerializer(many=True,read_only=True)
 
     class Meta:
         model = Department
@@ -181,3 +190,23 @@ class UserWithProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'profile', 'id', 'email', 'is_staff', 'first_name', 'last_name']
+
+
+class HomologacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Homologacion
+        fields = '__all__'
+
+
+class BasicSubjectToCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubjectToCourse
+        fields = '__all__'
+
+
+class SubjectToCourseSerializer(serializers.ModelSerializer):
+    homologaciones = HomologacionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = SubjectToCourse
+        fields = '__all__'

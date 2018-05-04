@@ -258,3 +258,34 @@ class Tutor(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+class SubjectToCourse(models.Model):
+    profile = models.ForeignKey(Profile, related_name="subjectsToCourse", on_delete=models.CASCADE, blank=True, null=True)
+    key = models.CharField(max_length=10)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.key + "," + self.name
+
+
+class Homologacion(models.Model):
+    FIRST = '1'
+    SECOND = '2'
+    THIRD = '3'
+    PRIORITY = (
+        (FIRST, 'FIRST OPTION'),
+        (SECOND, 'SECOND OPTION'),
+        (THIRD, 'THIRD OPTION'),
+    )
+    subjectToCourse = models.ForeignKey(SubjectToCourse, related_name="homologaciones", on_delete=models.CASCADE)
+    college = models.ForeignKey(College, related_name="homologaciones", on_delete=models.CASCADE,default=None)
+    academic_program = models.CharField(max_length=100)
+    key = models.CharField(max_length=10)
+    name = models.CharField(max_length=100)
+    priority = models.CharField(max_length=1, choices=PRIORITY, default=FIRST)
+
+    def __str__(self):
+        return self.key + "," + self.name
+
+

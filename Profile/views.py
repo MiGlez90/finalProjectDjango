@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import BasicCertificationSerializer, CertificationSerializer, BasicProfileSerializer, ProfileSerializer, CollegeSerializer, BasicCollegeSerializer, DepartmentSerializer, BasicDepartmentSerializer, AcademicProgramSerializer, BasicAcademicProgramSerializer, UserWithProfileSerializer, TutorSerializer, BasicTutorSerializer, AddressSerializer, BasicAddressSerializer, DocumentSerializer
-from .models import Profile, College, Department, AcademicProgram, Tutor, Address, CertificationType, Document
+from .serializers import *
+from .models import *
 from django.contrib.auth.models import User
 from rest_framework import views
 from rest_framework.response import Response
@@ -159,3 +159,18 @@ class DocumentsViewSet(APIView):
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 """
+
+
+class SubjectToCourseViewSet(viewsets.ModelViewSet):
+    queryset = SubjectToCourse.objects.all()
+    serializer_class = SubjectToCourseSerializer
+
+    def get_queryset(self):
+        # Recupera el usuario que hace la petición
+        user = self.request.user
+        # Crea el queryset
+        # Filtra y recupera solo los proyectos que pertenecen al usuario
+        return SubjectToCourse.objects.filter(profile=user.profile)
+
+    def perform_create(self, serializer):
+        serializer.save(profile=self.request.user.profile)

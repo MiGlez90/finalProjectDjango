@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path, include
 from rest_framework import routers
-from Profile.views import ProfileViewSet, DocumentsViewSet, CollegeViewSet, DepartmentViewSet, AcademicProgramViewset, ProfileWithToken, UserView, TutorViewSet, AddressViewSet, CertificationViewSet
+from Profile.views import *
 from django.conf import settings
 from django.views.static import serve
 
@@ -32,6 +32,7 @@ router.register(r'academic_programs', AcademicProgramViewset)
 router.register(r'users', ProfileWithToken)
 router.register(r'tutor', TutorViewSet)
 router.register(r'addresses', AddressViewSet)
+router.register(r'subjectsToCourse', SubjectToCourseViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
