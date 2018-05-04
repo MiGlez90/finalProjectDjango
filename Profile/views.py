@@ -174,3 +174,9 @@ class SubjectToCourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(profile=self.request.user.profile)
+
+
+class HomolgacionViewSet(viewsets.ModelViewSet):
+    queryset = Homologacion.objects.all()
+    serializer_class = HomologacionSerilaizer
+

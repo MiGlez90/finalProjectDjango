@@ -33,10 +33,11 @@ router.register(r'users', ProfileWithToken)
 router.register(r'tutor', TutorViewSet)
 router.register(r'addresses', AddressViewSet)
 router.register(r'subjectsToCourse', SubjectToCourseViewSet)
+router.register(r'homologaciones', HomolgacionViewSet)
 
 urlpatterns = [
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
     path('me/', UserView.as_view()),
     path('api/auth/', include(authUrls, namespace='auth-urls')),
     path('rest-auth/', include('rest_auth.urls')),

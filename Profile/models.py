@@ -268,6 +268,9 @@ class SubjectToCourse(models.Model):
     def __str__(self):
         return self.key + "," + self.name
 
+    def __unicode__(self):
+        return '%s: %s' % (self.key, self.name)
+
 
 class Homologacion(models.Model):
     FIRST = '1'

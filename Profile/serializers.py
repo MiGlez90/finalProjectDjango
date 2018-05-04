@@ -192,7 +192,7 @@ class UserWithProfileSerializer(serializers.ModelSerializer):
         fields = ['username', 'profile', 'id', 'email', 'is_staff', 'first_name', 'last_name']
 
 
-class HomologacionSerializer(serializers.ModelSerializer):
+class HomologacionSerializerForSTC(serializers.ModelSerializer):
     class Meta:
         model = Homologacion
         fields = '__all__'
@@ -205,8 +205,29 @@ class BasicSubjectToCourseSerializer(serializers.ModelSerializer):
 
 
 class SubjectToCourseSerializer(serializers.ModelSerializer):
-    homologaciones = HomologacionSerializer(many=True, read_only=True)
+    homologaciones = HomologacionSerializerForSTC(many=True, read_only=True)
 
     class Meta:
         model = SubjectToCourse
         fields = '__all__'
+
+
+class BasicHomologacionSerilaizer(serializers.ModelSerializer):
+    class Meta:
+        model = Homologacion
+        fields = '__all__'
+
+
+class HomologacionSerilaizer(serializers.ModelSerializer):
+    college = BasicCollegeSerializer(many=False, read_only=True)
+    subjectToCourse = serializers.SlugRelatedField(
+        many=False,
+        read_only=True,
+        slug_field='name'
+     )
+    # BasicSubjectToCourseSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Homologacion
+        fields = '__all__'
+
