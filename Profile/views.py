@@ -25,6 +25,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
             return ProfileSerializer
         return BasicProfileSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 
 class CollegeViewSet(viewsets.ModelViewSet):

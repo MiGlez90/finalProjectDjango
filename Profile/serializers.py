@@ -55,8 +55,8 @@ class Base64ImageField(serializers.ImageField):
 
 
 class BasicProfileSerializer(serializers.ModelSerializer):
-    profilePicture = Base64ImageField(max_length=None,use_url=True)
-    wallPicture = Base64ImageField(max_length=None,use_url=True)
+    profilePicture = Base64ImageField(max_length=None,use_url=True, allow_null=True)
+    wallPicture = Base64ImageField(max_length=None,use_url=True, allow_null=True)
 
     class Meta:
         model = Profile
