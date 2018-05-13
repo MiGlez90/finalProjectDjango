@@ -251,8 +251,8 @@ class Tutor(models.Model):
         (FATHER, 'Padre'),
     )
     relationship = models.CharField(max_length=2, choices=RELATIONSHIP, default=FATHER)
-    full_name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=60)
+    full_name = models.CharField(max_length=100,blank=True)
+    email = models.EmailField(max_length=60,blank=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     cellphone_number = models.CharField(max_length=15, blank=True, null=True)
 
