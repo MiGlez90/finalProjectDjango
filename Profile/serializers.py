@@ -176,6 +176,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     wallPicture = Base64ImageField(max_length=None, use_url=True)
     academic_program = AcademicProgramSerializer(many=False, read_only=True)
     documents = DocumentSerializer(many=True, read_only=True)
+    tutor = TutorSerializer(many=False,read_only=True)
 
     class Meta:
         model = Profile
