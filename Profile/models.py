@@ -223,12 +223,12 @@ class Subject(models.Model):
 
 class Address(models.Model):
     profile = models.ForeignKey(Profile, related_name="addresses", on_delete=models.CASCADE, blank=True, null=True)
-    address1 = models.CharField(max_length=100)
-    suburb = models.CharField(max_length=100, default="")
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=50)
-    country = models.CharField(max_length=50)
-    zip_code = models.CharField(max_length=10)
+    address1 = models.CharField(max_length=100, blank=True, default="")
+    suburb = models.CharField(max_length=100, blank=True, default="")
+    city = models.CharField(max_length=50,blank=True, default="")
+    state = models.CharField(max_length=50,blank=True, default="")
+    country = models.CharField(max_length=50,blank=True, default="")
+    zip_code = models.CharField(max_length=10,blank=True, default="")
 
     def __str__(self):
         return '%s, %s, %s, %s,CP: %s' % (self.address1, self.city, self.state, self.country, self.zip_code)
