@@ -168,6 +168,15 @@ class SubjectToCourseViewSet(viewsets.ModelViewSet):
     queryset = SubjectToCourse.objects.all()
     serializer_class = SubjectToCourseSerializer
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SubjectToCourseSerializer
+        if self.action == 'retrieve':
+            return SubjectToCourseSerializer
+        """if self.action == 'partial_update':
+            return CertificationSerializer"""
+        return BasicSubjectToCourseSerializer
+
     def get_queryset(self):
         # Recupera el usuario que hace la petición
         user = self.request.user
@@ -182,4 +191,13 @@ class SubjectToCourseViewSet(viewsets.ModelViewSet):
 class HomolgacionViewSet(viewsets.ModelViewSet):
     queryset = Homologacion.objects.all()
     serializer_class = HomologacionSerilaizer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return HomologacionSerilaizer
+        if self.action == 'retrieve':
+            return HomologacionSerilaizer
+        """if self.action == 'partial_update':
+            return CertificationSerializer"""
+        return BasicHomologacionSerilaizer
 
