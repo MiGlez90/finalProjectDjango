@@ -168,6 +168,21 @@ class DocumentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class HomologacionSerializerForP(serializers.ModelSerializer):
+    college = BasicCollegeSerializer(many=False, read_only=True)
+    class Meta:
+        model = Homologacion
+        fields = '__all__'
+
+
+class SubjectToCourseSerializerP(serializers.ModelSerializer):
+    homologaciones = HomologacionSerializerForP(many=True, read_only=True)
+
+    class Meta:
+        model = SubjectToCourse
+        fields = '__all__'
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False,read_only=True)
     addresses = BasicAddressSerializer(many=True, read_only=True)
@@ -177,6 +192,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     academic_program = AcademicProgramSerializer(many=False, read_only=True)
     documents = DocumentSerializer(many=True, read_only=True)
     tutor = TutorSerializer(many=False,read_only=True)
+    subjectsToCourse = SubjectToCourseSerializerP(many=True, read_only=True)
 
     class Meta:
         model = Profile
@@ -194,6 +210,7 @@ class UserWithProfileSerializer(serializers.ModelSerializer):
 
 
 class HomologacionSerializerForSTC(serializers.ModelSerializer):
+    college = BasicCollegeSerializer(many=False, read_only=True)
     class Meta:
         model = Homologacion
         fields = '__all__'
